@@ -1,9 +1,7 @@
 import pandas as pd
 from datetime import date, timedelta
 import streamlit as st
-class DataAnalysis:    
-    totalPopulation=0
-
+class DataAnalysis: 
     def __init__(self): # constructor method
         print('Constructor invoked')
         self.df=self.readVaccineData()

@@ -5,7 +5,7 @@ import streamlit as st
 from Utils import  *
 import numpy as np
 import os
-st.title('Vaccines Dashboard')
+st.title('Dashboard Vaccines')
 data=DataAnalysis()
 #st.dataframe(data.df)
 #show list of regions
@@ -24,7 +24,7 @@ fig=px.line(all_data,all_data.index,y=dictTypeDose[selectedTypeDose],labels={
 st.plotly_chart(fig)
 
 ##show the percentage vaccines for regions
-st.title("Plot Percentage vaccines for regions")
+st.title("Percentage vaccines for regions")
 #selectedTypeDose=st.sidebar.selectbox("Choose Dose Type ", list(listTypeDose), 0)
 percent=[]
 data.sumDf()
@@ -39,9 +39,8 @@ fig.update_layout(width=800,height=600,
     legend_title="Regions Name",
 )
 st.plotly_chart(fig)
-
 #plot yesterday
-st.title("Plot Yesterday vaccines for regions")
+st.title("Yesterday vaccines for regions")
 data.yesterdayDf()
 #selectedTypeDose= st.selectbox("Choose Dose Type ", list(listTypeDose), 0,key='Yesterday')
 fig = px.bar(data.df_Y, x="nome_regione", y=dictTypeDose[selectedTypeDose], color="nome_regione")
@@ -51,9 +50,8 @@ fig.update_layout(width=800,height=600,
     legend_title="Regions Name",
 )
 st.plotly_chart(fig)
-
 #rapporto vaccini consegnati e fatti
-st.title("Plot ratio vaccine done over delivered")
+st.title("Ratio vaccines done over delivered")
 data.readSummaryData()
 fig = px.bar(data.dfSummary, x="nome_area", y=data.dfSummary['dosi_somministrate']/data.dfSummary['dosi_consegnate'], color="nome_area")
 fig.update_layout(width=800,height=600,
@@ -62,9 +60,6 @@ fig.update_layout(width=800,height=600,
     legend_title="Regions Name",
 )
 st.plotly_chart(fig)
-
-
-
 ##previsione immunità di gregge
 st.title("Statistics vaccinated people")
 totalDoses=data.df[dictTypeDose[selectedTypeDose]].sum()
@@ -85,8 +80,7 @@ today = date.today()
 st.markdown("__Herd Immunity__")
 name_cols=st.beta_columns(2)
 immunità = name_cols[0].slider('Herd immunity', min_value=0,max_value=100,value=60, step=5)
-numDaysBefore=name_cols[1].text_input("Number average days before",value=7)
-
+numDaysBefore=name_cols[1].text_input("Average Number on days before",value=7)
 daysBefore = date.today() - timedelta(days=int(numDaysBefore)+1)
 mean=sumRegions.loc[daysBefore.strftime("%Y-%m-%d"):today.strftime("%Y-%m-%d")]['totale'].mean()
 i=0
