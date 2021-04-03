@@ -3,16 +3,17 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import streamlit as st
 from Utils import  *
+import numpy as np
 import os
 st.title('Vaccines Dashboard')
 data=DataAnalysis()
 #st.dataframe(data.df)
 #show list of regions
 listRegion=data.df.nome_regione.unique()
-selectedRegion= st.selectbox("Choose a region", listRegion, 0)
+selectedRegion= st.sidebar.selectbox("Choose a region", listRegion, 0)
 #select radio button for type of dose
 listTypeDose={'Total','First dose','Second dose'}
-selectedTypeDose = st.radio("Choose Dose Type ", list(listTypeDose))
+selectedTypeDose = st.sidebar.radio("Choose Dose Type ", list(listTypeDose))
 dictTypeDose={'Total': 'totale', 'First dose': 'prima_dose', 'Second dose': 'seconda_dose'}
 regione=data.df[data.df['nome_regione']==selectedRegion]
 all_data = regione.sort_index()
@@ -24,7 +25,7 @@ st.plotly_chart(fig)
 
 ##show the percentage vaccines for regions
 st.title("Plot Percentage vaccines for regions")
-selectedTypeDose=st.selectbox("Choose Dose Type ", list(listTypeDose), 0)
+#selectedTypeDose=st.sidebar.selectbox("Choose Dose Type ", list(listTypeDose), 0)
 percent=[]
 data.sumDf()
 for index, row in data.sum_df.iterrows():
@@ -42,7 +43,7 @@ st.plotly_chart(fig)
 #plot yesterday
 st.title("Plot Yesterday vaccines for regions")
 data.yesterdayDf()
-selectedTypeDose= st.selectbox("Choose Dose Type ", list(listTypeDose), 0,key='Yesterday')
+#selectedTypeDose= st.selectbox("Choose Dose Type ", list(listTypeDose), 0,key='Yesterday')
 fig = px.bar(data.df_Y, x="nome_regione", y=dictTypeDose[selectedTypeDose], color="nome_regione")
 fig.update_layout(width=800,height=600,
     xaxis_title="Regions",
@@ -69,14 +70,14 @@ st.title("Statistics vaccinated people")
 totalDoses=data.df[dictTypeDose[selectedTypeDose]].sum()
 #print(totalDoses)
 #print(totalPopulation)
-st.text("Percentage "+selectedTypeDose+" vaccinated people " +str((totalDoses/data.totalPopulation)*100))
+st.text("Percentage "+selectedTypeDose+" vaccinated people " +str(np.round((totalDoses/data.totalPopulation)*100,3)))
 dfOrder = data.df.sort_index()
 sumRegions=dfOrder.groupby('data_somministrazione').sum()
 st.markdown("__Trend overall Italy__")
 fig=px.line(sumRegions,sumRegions.index,y=dictTypeDose[selectedTypeDose],labels={
                      dictTypeDose[selectedTypeDose]: selectedTypeDose,
                      "data_somministrazione": "Date",
-                 },title=dictTypeDose[selectedTypeDose])
+                 },title=selectedTypeDose)
 st.plotly_chart(fig)
 #prediction
 today = date.today()
@@ -93,4 +94,4 @@ while ((totalDoses/data.totalPopulation)*100<immunità):
   totalDoses=totalDoses+mean
   i=i+1
 st.text("Date "+str((date.today() + timedelta(days=i))))
-st.text("Percentage "+selectedTypeDose+" vaccinated people " +str((totalDoses/data.totalPopulation)*100))
+st.text("Percentage "+selectedTypeDose+" vaccinated people " +str(np.round((totalDoses/data.totalPopulation)*100,3)))
