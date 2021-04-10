@@ -8,17 +8,8 @@ class DataAnalysis:
         self.regionData=self.readRegionsData()
     def readVaccineData(self):
         url = 'https://github.com/italia/covid19-opendata-vaccini/blob/master/dati/somministrazioni-vaccini-summary-latest.csv?raw=true'
-        df = pd.read_csv(url, index_col=0)        
-        mid = df['nome_area']
-        #convert name of column flsor have match with file excel regioni
-        df.drop(labels=['nome_area'], axis=1, inplace = True)
-        df.insert(1, 'nome_regione', mid)
-        df.drop(labels=['area'], axis=1, inplace = True)
-        df[(df['nome_regione']=="Provincia Autonoma Bolzano / Bozen")|(df['nome_regione']=="Valle d'Aosta / Vallée d'Aoste") ]
-        df['nome_regione']=df['nome_regione'].str.replace('Provincia Autonoma Bolzano / Bozen','Trentino-Alto Adige')
-        df['nome_regione']=df['nome_regione'].str.replace('Provincia Autonoma Trento','Trentino-Alto Adige')
-        df['nome_regione']=df['nome_regione'].str.replace("Valle d'Aosta / Vallée d'Aoste","Valle d'Aosta/Vallée d'Aoste")
-        #st.dataframe(df.head(4))
+        df = pd.read_csv(url, index_col=0)  
+        self.changeStructureDf(df)
         #show list of regions
         return df
     def readRegionsData(self):
@@ -36,7 +27,10 @@ class DataAnalysis:
     def readSummaryData(self):
         url = 'https://github.com/italia/covid19-opendata-vaccini/blob/master/dati/vaccini-summary-latest.csv?raw=true'
         self.dfSummary=pd.read_csv(url, index_col=False)
-    
+    def readDosingData(self):
+        url='https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv?raw=true'
+        self.dfDosing=pd.read_csv(url, index_col=False)
+        self.changeStructureDf(self.dfDosing)            
     def sumDf(self):
         self.sum_df=self.df.groupby(["nome_regione"]).sum()
         self.sum_df=self.sum_df.reset_index()
@@ -45,4 +39,15 @@ class DataAnalysis:
     def yesterdayDf(self):
         yesterday = date.today() - timedelta(days=1)
         d1 = yesterday.strftime("%Y-%m-%d")
-        self.df_Y=self.df.loc[d1]       
+        self.df_Y=self.df.loc[d1]  
+
+    def changeStructureDf(self,df):
+        mid = df['nome_area']
+        df.drop(labels=['nome_area'], axis=1, inplace = True)
+        df.insert(1, 'nome_regione', mid)
+        df.drop(labels=['area'], axis=1, inplace = True)
+        df[(df['nome_regione']=="Provincia Autonoma Bolzano / Bozen")|(df['nome_regione']=="Valle d'Aosta / Vallée d'Aoste") ]
+        df['nome_regione']=df['nome_regione'].str.replace('Provincia Autonoma Bolzano / Bozen','Trentino-Alto Adige')
+        df['nome_regione']=df['nome_regione'].str.replace('Provincia Autonoma Trento','Trentino-Alto Adige')
+        df['nome_regione']=df['nome_regione'].str.replace("Valle d'Aosta / Vallée d'Aoste","Valle d'Aosta/Vallée d'Aoste")
+        
