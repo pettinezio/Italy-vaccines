@@ -6,6 +6,11 @@ Quick streamlit dashboard to visualise the trend of vaccines for COVID-19 in Ita
 
 * Hosted with Herokuapp at this link: https://vaccines-italy.herokuapp.com/
 * Hosted with Streamlit at this link: https://share.streamlit.io/pettinezio/italy-vaccines/main/App.py 
+
+## Settings App
+* Choose Language (English/Italian)
+* Choose Region 
+* Choose Dose Type
 ## Install and run
 
 - Clone the repository
@@ -13,9 +18,6 @@ Quick streamlit dashboard to visualise the trend of vaccines for COVID-19 in Ita
 - `streamlit run App.py`
 
 ## TODO
-* Demos with streamlit application
-* Add Italian language
-* Add new plot
 * Add dark webApp version
 
 
