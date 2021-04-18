@@ -1,7 +1,7 @@
 # Vaccines-Italy
 Trend of vaccines on Italy.
 Quick streamlit dashboard to visualise the trend of vaccines for COVID-19 in Italy.
-
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/pettinezio/italy-vaccines/main/App.py )🎈
 ## Demos
 
 * Hosted with Herokuapp at this link: https://vaccines-italy.herokuapp.com/
